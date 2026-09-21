@@ -1,38 +1,59 @@
-# Importa a classe Calculadora do arquivo calculadora.py
 from Calculadora import Calculadora
 
 class InterfaceCalculadora:
     """Classe responsável por interagir com o usuário e exibir os dados."""
     def __init__(self):
-        # A interface instancia a calculadora para poder usá-la
         self.calculadora = Calculadora()
 
     def iniciar(self):
         print("=== Calculadora Interativa ===")
-        print("Digite os números e operadores passo a passo.")
+        print("Operadores disponíveis:")
+        print("  +   : Adição")
+        print("  -   : Subtração")
+        print("  *   : Multiplicação")
+        print("  /   : Divisão")
+        print("  ^   : Potenciação (Ex: 2 ^ 3)")
+        print("  %   : Porcentagem (Ex: 15 % 200 calcula 15% de 200)")
+        print("  mod : Resto da divisão (Ex: 10 mod 3)")
+        print("  v   : Raiz quadrada (Ex: v 16 ou sqrt 16)")
         print("Para ver o resultado final, digite '=' quando o operador for solicitado.\n")
 
         equacao_formada = ""
 
-        primeiro_num = input("Digite o primeiro número: ").strip()
-        equacao_formada += primeiro_num
-        print(f"-> Equação se formando: [ {equacao_formada} ]\n")
+        primeiro_input = input("Digite o primeiro número (ou 'v' para raiz): ").strip().lower()
+        
+        if primeiro_input in ['v', 'sqrt']:
+            equacao_formada += "v "
+            print(f"-> Equação se formando: [ {equacao_formada} ]\n")
+            num = input("Digite o número para calcular a raiz: ").strip()
+            equacao_formada += num
+            print(f"-> Equação se formando: [ {equacao_formada} ]\n")
+        else:
+            equacao_formada += primeiro_input
+            print(f"-> Equação se formando: [ {equacao_formada} ]\n")
 
         while True:
-            operador = input("Digite a operação (+, -, *, /) ou '=' para finalizar: ").strip()
+            operador = input("Digite o operador (+, -, *, /, ^, %, mod, v) ou '=' para finalizar: ").strip().lower()
             
             if operador == '=':
                 break 
             
-            if operador not in ['+', '-', '*', '/']:
+            operadores_validos = ['+', '-', '*', '/', '^', '%', 'mod', 'v', 'sqrt']
+            if operador not in operadores_validos:
                 print("Operador inválido. Tente novamente.")
                 continue
 
-            equacao_formada += f" {operador} "
-            print(f"-> Equação se formando: [ {equacao_formada} ]\n")
-
-            proximo_num = input("Digite o próximo número: ").strip()
-            equacao_formada += proximo_num
+            if operador in ['v', 'sqrt']:
+                equacao_formada += f" {operador} "
+                print(f"-> Equação se formando: [ {equacao_formada} ]\n")
+                proximo_num = input("Digite o número para a raiz: ").strip()
+                equacao_formada += proximo_num
+            else:
+                equacao_formada += f" {operador} "
+                print(f"-> Equação se formando: [ {equacao_formada} ]\n")
+                proximo_num = input("Digite o próximo número: ").strip()
+                equacao_formada += proximo_num
+                
             print(f"-> Equação se formando: [ {equacao_formada} ]\n")
 
         self.exibir_resultado(equacao_formada)
@@ -55,7 +76,6 @@ class InterfaceCalculadora:
             print("="*30 + "\n")
 
 
-# --- Execução do Programa ---
 if __name__ == "__main__":
     app = InterfaceCalculadora()
     app.iniciar()

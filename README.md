@@ -1,42 +1,33 @@
 # 🚀 Calculadora Python Orientada a Objetos (POO)
 
-*Como apresentado na nossa demonstração, esta não é apenas mais uma calculadora de terminal. É um motor matemático seguro e inteligente desenhado para ser robusto!*
+*Como apresentado na nossa demonstração, esta não é apenas mais uma calculadora de terminal. É um motor matemático seguro e inteligente desenhado para ser robusto e completo!*
 
 ## ✨ O Poder por Trás da Tela
 
-Você acabou de ver como a calculadora constrói passo a passo equações complexas (como `2 + 5 - 1 * 4 / 6`) e entrega o resultado exato, respeitando perfeitamente a precedência matemática. E o mais impressionante: **tudo isso sem usar a função "preguiçosa" e insegura `eval()` do Python!**
+Você acabou de ver como a calculadora constrói passo a passo equações complexas (como `v 16 + 2 ^ 3 - 15 % 200 + 10 mod 3`) e entrega o resultado exato, respeitando perfeitamente a hierarquia matemática[cite: 1, 3]. E o mais impressionante: **tudo isso sem usar a função "preguiçosa" e insegura `eval()` do Python!**
 
 ### 🛠️ Principais Diferenciais e Recursos
 
-- **Precedência Matemática Real:** Multiplicação e divisão são rigorosamente resolvidas antes de somas e subtrações, graças a um algoritmo próprio de *tokenização* e varredura de listas em múltiplas passagens.
-- **Arquitetura Orientada a Objetos:** O código aplica conceitos de POO (como Composição e Encapsulamento) e segue o *Princípio da Responsabilidade Única*. A regra de negócios (o "cérebro" matemático) é completamente isolada da interface com o usuário.
-- **Segurança em Primeiro Lugar:** Sem atalhos de linguagem que abrem brechas. As expressões são limpas e interpretadas de forma customizada utilizando Expressões Regulares (`regex`).
-- **Interface Interativa Dinâmica:** O usuário não joga uma string confusa de uma vez. Ele constrói a equação passo a passo, acompanhando a formação da estrutura matemática em tempo real.
-- **Formatação Inteligente (Smart Float):** Resultados matemáticos são exibidos de forma esteticamente limpa. Decimais longos são arredondados para duas casas (`1.66`), e floats que representam inteiros (como `4.0`) são limpos visualmente para `4`.
-- **Tratamento de Exceções:** Sistema preparado para evitar quebras por divisão por zero, capturando e informando o erro de forma amigável ao usuário.
+- **Precedência Matemática Avançada em Múltiplas Etapas:** Resolução estrita por ordem de operações[cite: 1, 3]:
+  1. Operações unárias: Raiz quadrada (`v` ou `sqrt`)[cite: 1]
+  2. Potenciação (`^`)[cite: 1]
+  3. Multiplicação (`*`), Divisão (`/`), Porcentagem (`%`) e Resto da divisão (`mod`)[cite: 1]
+  4. Adição (`+`) e Subtração (`-`)[cite: 1]
+- **Conjunto de Operações Expandido:**
+  - **Porcentagem (`%`):** Calcula porcentagens de valores diretamente (ex: `15 % 200` resulta em `30`)[cite: 1].
+  - **Raiz Quadrada (`v` ou `sqrt`):** Suporte prático utilizando a letra **`v`** (pensado para teclados sem o símbolo `√`) ou a palavra-chave `sqrt`[cite: 1].
+  - **Potenciação (`^`):** Elevação de potências simples e intuitiva (ex: `2 ^ 3`)[cite: 1].
+  - **Resto da Divisão (`mod`):** Retorna o resto da divisão inteira (ex: `10 mod 3`)[cite: 1].
+- **Arquitetura Orientada a Objetos:** Aplicação dos conceitos de POO (Composição e Encapsulamento) seguindo o *Princípio da Responsabilidade Única*, mantendo a regra de negócios separada da interface[cite: 1, 2, 3].
+- **Segurança e Sanitização:** Tratamento via Expressões Regulares (`regex`) que convertem entradas para minúsculas e previnem injeções de código inseguras[cite: 1, 3].
+- **Interface Interativa Dinâmica:** Permite construir a equação passo a passo no terminal, acompanhando a evolução da expressão em tempo real e aceitando entradas insensíveis a maiúsculas/minúsculas.
+- **Formatação Inteligente (Smart Float) & Tratamento de Erros:** Exibição arredondada para duas casas decimais em fracionários, limpeza visual para inteiros (ex: `4.0` vira `4`) e prevenção de erros (como divisão por zero e raiz de números negativos)[cite: 1, 2, 3].
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do Projeto[cite: 3]
 
-O projeto foi dividido em dois módulos essenciais para facilitar a escalabilidade e manutenção:
+O projeto está dividido em dois módulos essenciais[cite: 3]:
 
 ```text
 /
-├── calculadora.py      # O Motor Matemático: Contém a classe `Calculadora` (Lógica e Regex)
-└── main.py             # A Interface: Contém a classe `InterfaceCalculadora` (I/O e Loop de repetição)
-```
-
-## 🚀 Como Executar e Testar
-
-1. Certifique-se de ter o Python 3.x instalado no seu ambiente.
-2. Abra o terminal e navegue até a pasta onde os arquivos foram salvos.
-3. Para iniciar a demonstração interativa, chame o arquivo da interface:
-
-```bash
-python main.py
-```
-
-4. Siga as instruções no terminal: digite o primeiro número, escolha a operação e vá construindo a sua equação.
-5. Quando estiver pronto para ver o motor em ação, digite `=` no lugar de um operador matemático.
-
----
-*Projeto concebido com foco em Boas Práticas, Segurança e Lógica Estruturada.*
+├── Calculadora.py      # O Motor Matemático: Classe Calculadora (Lógica, Regex e Precedência)
+└── Main.py             # A Interface: Classe InterfaceCalculadora (I/O e Loop do Usuário)
