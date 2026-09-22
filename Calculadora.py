@@ -1,3 +1,4 @@
+import math
 import re
 from Operacoes.Soma import Soma
 from Operacoes.Multiplicacao import Multiplicacao
@@ -8,45 +9,20 @@ from Operacoes.Porcentagem import Porcentagem
 from Operacoes.Raiz import Raiz
 
 class Calculadora:
+    """Classe responsável por realizar os cálculos matemáticos."""
     def __init__(self):
-        self.soma = Soma()
-        self.mult = Multiplicacao()
-        self.div = Divisao()
-        self.pot = Potenciacao()
-        self.log = Logaritmo()
-        self.porc = Porcentagem()
-        self.raiz = Raiz()
-
-        self.operacoes_nivel_1 = ['^', 'log', '%']
-        self.operacoes_nivel_2 = ['*', '/']
-        self.operacoes_nivel_3 = ['+', '-']
+        self.operacoes_potencia = ['^']
+        self.operacoes_alta_prioridade = ['*', '/', '%', 'mod']
+        self.operacoes_baixa_prioridade = ['+', '-']
 
     def _tokenizar(self, expressao: str) -> list:
-        expressao = expressao.replace(" ", "")
-        tokens_string = re.findall(r'[Vv]?\d+\.?\d*|log|[+\-*/^%]', expressao)
+        # Converter para minúsculas facilita aceitar 'V' ou 'v'
+        expressao = expressao.replace(" ", "").lower()
+        tokens_string = re.findall(r'\d+\.?\d*|sqrt|mod|[+\-*/^%v]', expressao)
         
         tokens = []
-        i = 0
-        while i < len(tokens_string):
-            token = tokens_string[i]
-            
-            # Identifica se o '-' é um sinal negativo (unário) e não uma subtração
-            if token == '-' and (i == 0 or tokens_string[i-1] in ['+', '-', '*', '/', '^', '%', 'log']):
-                if i + 1 < len(tokens_string):
-                    next_token = tokens_string[i+1]
-                    # Aplica o sinal negativo no número ou na raiz
-                    if next_token.upper().startswith('V'):
-                        numero = float(next_token[1:])
-                        tokens.append(-self.raiz.calcular(numero))
-                    else:
-                        tokens.append(-float(next_token))
-                    i += 2
-                    continue
-                else:
-                    raise ValueError("Expressão terminada em sinal negativo.")
-
-            # Trata operadores e números positivos/raízes padrão
-            if token in ['+', '-', '*', '/', '^', '%', 'log']:
+        for token in tokens_string:
+            if token in "+-*/^%v" or token in ["sqrt", "mod"]:
                 tokens.append(token)
             elif token.upper().startswith('V'):
                 numero = float(token[1:])
@@ -58,6 +34,23 @@ class Calculadora:
             
         return tokens
 
+    def _resolver_unarios(self, tokens: list) -> list:
+        """Resolve operações unárias como Raiz Quadrada (v ou sqrt)."""
+        i = 0
+        while i < len(tokens):
+            if tokens[i] in ['v', 'sqrt']:
+                if i + 1 < len(tokens) and isinstance(tokens[i + 1], (int, float)):
+                    numero_dir = tokens[i + 1]
+                    if numero_dir < 0:
+                        raise ValueError("Não existe raiz quadrada de número negativo nos números reais.")
+                    resultado = math.sqrt(numero_dir)
+                    tokens = tokens[:i] + [resultado] + tokens[i + 2:]
+                else:
+                    raise ValueError("Sintaxe incorreta para raiz quadrada.")
+            else:
+                i += 1
+        return tokens
+
     def _resolver_operacoes(self, tokens: list, operadores_alvo: list) -> list:
         i = 0
         while i < len(tokens):
@@ -66,10 +59,18 @@ class Calculadora:
                 numero_esq = tokens[i - 1]
                 numero_dir = tokens[i + 1]
                 
-                if operador == '*':
-                    resultado = self.mult.calcular(numero_esq, numero_dir)
+                if operador == '^':
+                    resultado = numero_esq ** numero_dir
+                elif operador == '*':
+                    resultado = numero_esq * numero_dir
                 elif operador == '/':
-                    resultado = self.div.calcular(numero_esq, numero_dir)
+                    if numero_dir == 0:
+                        raise ZeroDivisionError("Erro: Divisão por zero não é permitida.")
+                    resultado = numero_esq / numero_dir
+                elif operador == '%':
+                    resultado = (numero_esq * numero_dir) / 100
+                elif operador == 'mod':
+                    resultado = numero_esq % numero_dir
                 elif operador == '+':
                     resultado = self.soma.adicionar(numero_esq, numero_dir)
                 elif operador == '-':
@@ -90,10 +91,14 @@ class Calculadora:
     def calcular(self, expressao: str) -> float:
         try:
             tokens = self._tokenizar(expressao)
-            tokens = self._resolver_operacoes(tokens, self.operacoes_nivel_1)
-            tokens = self._resolver_operacoes(tokens, self.operacoes_nivel_2)
-            tokens = self._resolver_operacoes(tokens, self.operacoes_nivel_3)
-            return tokens[0]
+            tokens = self._resolver_unarios(tokens)
+            tokens = self._resolver_operacoes(tokens, self.operacoes_potencia)
+            tokens = self._resolver_operacoes(tokens, self.operacoes_alta_prioridade)
+            tokens = self._resolver_operacoes(tokens, self.operacoes_baixa_prioridade)
+            
+            if tokens:
+                return tokens[0]
+            return None
         except Exception as e:
             print(f"\nErro matemático: {e}")
             return None
