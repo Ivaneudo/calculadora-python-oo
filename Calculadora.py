@@ -12,25 +12,30 @@ class Calculadora:
     """Classe responsável por realizar os cálculos matemáticos."""
     def __init__(self):
         self.operacoes_potencia = ['^']
-        self.operacoes_alta_prioridade = ['*', '/', '%', 'mod']
+        self.operacoes_alta_prioridade = ['*', '/', '%', 'mod', 'log'] # 'log' adicionado aqui
         self.operacoes_baixa_prioridade = ['+', '-']
+        
+        self.soma = Soma()
+        self.pot = Potenciacao()
+        self.log = Logaritmo()
+        self.porc = Porcentagem()
+        self.raiz = Raiz()
 
     def _tokenizar(self, expressao: str) -> list:
-        # Converter para minúsculas facilita aceitar 'V' ou 'v'
         expressao = expressao.replace(" ", "").lower()
-        tokens_string = re.findall(r'\d+\.?\d*|sqrt|mod|[+\-*/^%v]', expressao)
+        # 'log' adicionado na expressão regular abaixo
+        tokens_string = re.findall(r'\d+\.?\d*|sqrt|mod|log|[+\-*/^%v]', expressao)
         
         tokens = []
         for token in tokens_string:
-            if token in "+-*/^%v" or token in ["sqrt", "mod"]:
+            # 'log' adicionado na verificação abaixo
+            if token in "+-*/^%v" or token in ["sqrt", "mod", "log"]:
                 tokens.append(token)
             elif token.upper().startswith('V'):
                 numero = float(token[1:])
                 tokens.append(self.raiz.calcular(numero))
             else:
                 tokens.append(float(token))
-            
-            i += 1
             
         return tokens
 
