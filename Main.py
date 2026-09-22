@@ -1,15 +1,13 @@
-# Importa a classe Calculadora do arquivo calculadora.py
 from Calculadora import Calculadora
 
 class InterfaceCalculadora:
-    """Classe responsável por interagir com o usuário e exibir os dados."""
     def __init__(self):
-        # A interface instancia a calculadora para poder usá-la
         self.calculadora = Calculadora()
 
     def iniciar(self):
         print("=== Calculadora Interativa ===")
-        print("Digite os números e operadores passo a passo.")
+        print("Você pode inserir números negativos (ex: -5) e usar 'V' para raízes (ex: V25, -V9) a qualquer momento.")
+        print("Operadores suportados: +, -, *, /, ^, log, %")
         print("Para ver o resultado final, digite '=' quando o operador for solicitado.\n")
 
         equacao_formada = ""
@@ -19,12 +17,12 @@ class InterfaceCalculadora:
         print(f"-> Equação se formando: [ {equacao_formada} ]\n")
 
         while True:
-            operador = input("Digite a operação (+, -, *, /) ou '=' para finalizar: ").strip()
+            operador = input("Digite a operação (+, -, *, /, ^, log, %) ou '=' para finalizar: ").strip()
             
             if operador == '=':
                 break 
             
-            if operador not in ['+', '-', '*', '/']:
+            if operador not in ['+', '-', '*', '/', '^', 'log', '%']:
                 print("Operador inválido. Tente novamente.")
                 continue
 
@@ -55,7 +53,6 @@ class InterfaceCalculadora:
             print("="*30 + "\n")
 
 
-# --- Execução do Programa ---
 if __name__ == "__main__":
     app = InterfaceCalculadora()
     app.iniciar()
