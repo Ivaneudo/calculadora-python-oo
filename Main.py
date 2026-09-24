@@ -20,7 +20,7 @@ class InterfaceCalculadora:
         print("|  %        | Porcentagem (Ex: 15 % 200)         |")
         print("|  mod      | Resto da divisão (Ex: 10 mod 3)    |")
         print("|  v / sqrt | Raiz quadrada (Ex: v 16)           |")
-        print("|  log      | Logaritmo (Ex: 100 log 10)         |") # Nova linha adicionada
+        print("|  log      | Logaritmo (Ex: 100 log 10)         |") 
         print("+-----------+------------------------------------+")
         print("Digite '=' quando o operador for solicitado para ver o resultado.\n")
 
